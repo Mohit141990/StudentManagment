@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34818.151
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentManagment", "StudentManagment\StudentManagment.csproj", "{420F29B2-0EC8-4EAA-B9F0-AA77A7CE1493}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentManagment", "StudentManagment\StudentManagment.csproj", "{420F29B2-0EC8-4EAA-B9F0-AA77A7CE1493}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentManagment.Client", "StudentManagment.Client\StudentManagment.Client.csproj", "{429E5C41-DD19-4DA3-BD44-35C2DD8A22E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentManagment.Client", "StudentManagment.Client\StudentManagment.Client.csproj", "{429E5C41-DD19-4DA3-BD44-35C2DD8A22E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentManagment.Core", "StudentManagment.Core\StudentManagment.Core.csproj", "{273A9BA3-DD8D-4F13-9BFF-203E0EB8A81E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{429E5C41-DD19-4DA3-BD44-35C2DD8A22E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{429E5C41-DD19-4DA3-BD44-35C2DD8A22E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{429E5C41-DD19-4DA3-BD44-35C2DD8A22E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{273A9BA3-DD8D-4F13-9BFF-203E0EB8A81E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{273A9BA3-DD8D-4F13-9BFF-203E0EB8A81E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{273A9BA3-DD8D-4F13-9BFF-203E0EB8A81E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{273A9BA3-DD8D-4F13-9BFF-203E0EB8A81E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
