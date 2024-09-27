@@ -1,7 +1,19 @@
-using StudentManagment.Client.Pages;
+using Microsoft.EntityFrameworkCore;
 using StudentManagment.Components;
+using StudentManagment.Core;
+using StudentManagment.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+
+// Add services to the container.
+string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+builder.Services.AddDbContext<StudentMGTDBContext>(options =>options.UseSqlServer(connectionString));
+
+
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<StudentMGTDBContext>();
+
 
 // Add services to the container.
 builder.Services.AddRazorComponents()

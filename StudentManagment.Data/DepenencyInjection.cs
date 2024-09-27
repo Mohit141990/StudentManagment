@@ -1,6 +1,6 @@
 ﻿namespace StudentManagment.Data
 {
-    public class Class1
+    public class DepenencyInjection
     {
 
     }
