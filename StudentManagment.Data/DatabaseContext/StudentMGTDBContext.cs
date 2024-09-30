@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using StudentManagment.Core;
+using StudentManagment.Core.Entites;
 
 namespace StudentManagment.Data
 {
@@ -13,7 +14,10 @@ namespace StudentManagment.Data
            
 
         }
-       
+
+        public virtual DbSet<Student> Students { get; set; } = null!;
+        public virtual DbSet<Enrollments> Enrollment { get; set; } = null!;
+        public virtual DbSet<Courses> Course { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -42,7 +46,18 @@ namespace StudentManagment.Data
             //modelBuilder.Entity<IdentityUserLogin<Guid>>().HasKey(login => new { login.LoginProvider, login.ProviderKey });
             //modelBuilder.Entity<IdentityUserRole<Guid>>().HasKey(role => new { role.UserId, role.RoleId });
             //modelBuilder.Entity<IdentityUserToken<Guid>>().HasKey(token => new { token.UserId, token.LoginProvider, token.Name });
+
+
+
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(StudentMGTDBContext).Assembly);
+            modelBuilder.Entity<Student>().HasKey(s => s.StudentID);
+            modelBuilder.Entity<Enrollments>().HasKey(s => s.EnrollmentID);
+            modelBuilder.Entity<Courses>().HasKey(s => s.CourseID);
+
+            modelBuilder.Entity<Student>().HasIndex(s => s.StudentID);
+            modelBuilder.Entity<Student>().HasIndex(s => new { s.FirstName, s.LastName });
+            modelBuilder.Entity<Courses>().HasIndex(s => s.CourseID);
+            modelBuilder.Entity<Enrollments>().HasIndex(s => s.EnrollmentID);
             base.OnModelCreating(modelBuilder);
         }
     }
