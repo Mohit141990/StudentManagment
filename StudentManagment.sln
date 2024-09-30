@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentManagment", "Student
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentManagment.Client", "StudentManagment.Client\StudentManagment.Client.csproj", "{429E5C41-DD19-4DA3-BD44-35C2DD8A22E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentManagment.Core", "StudentManagment.Core\StudentManagment.Core.csproj", "{273A9BA3-DD8D-4F13-9BFF-203E0EB8A81E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentManagment.Core", "StudentManagment.Core\StudentManagment.Core.csproj", "{273A9BA3-DD8D-4F13-9BFF-203E0EB8A81E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentManagment.Data", "StudentManagment.Data\StudentManagment.Data.csproj", "{1454C345-4905-4AD4-BFD3-50764080F133}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentManagment.Data", "StudentManagment.Data\StudentManagment.Data.csproj", "{1454C345-4905-4AD4-BFD3-50764080F133}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

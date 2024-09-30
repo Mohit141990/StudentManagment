@@ -1,0 +1,34 @@
+﻿@rendermode InteractiveServer
+
+@if (!string.IsNullOrWhiteSpace(Label))
+{
+    <label for="@Id">@Label</label>
+}
+<div class="input-group mb-3 ">
+    @* <input type="text" class="form-control textbox-parameters" id="@Id" value="@Value" @onchange="this.OnChange"> *@
+    @*  <input type="text" class="form-control textbox-parameters" id="@Id" value="@Value"> *@
+    @*   <input type="text" @bind="@Value" @oninput="@((e) => { Value=(string)e.Value;})"> *@
+    @* <input type="text" class="custom-input" @bind="Value" /> *@
+    <input type="text" class="form-control" @onchange="this.OnChange" />
+</div>
+
+@code {
+    [Parameter]
+    public string Value { get; set; } = "";
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+
+    [Parameter]
+    public string? Label { get; set; } = "";
+    [Parameter]
+    public string? Id { get; set; }
+
+    private async Task OnChange(ChangeEventArgs e)
+    {
+        // ValueChanged.InvokeAsync(e.Value.ToString());
+        var newValue = e.Value.ToString();
+        Value = newValue;
+        await ValueChanged.InvokeAsync(newValue);
+    }
+
+}
