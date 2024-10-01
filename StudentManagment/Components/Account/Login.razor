@@ -1,0 +1,65 @@
+﻿@page "/login"
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.Build.Framework
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> _userManager;
+@inject NavigationManager Navigation
+
+
+<EditForm Model="loginmodel" method="post" OnValidSubmit="SubmitLoginDetails" FormName="login">
+    <DataAnnotationsValidator />
+    <h2>Login To System</h2>
+    <hr />
+    <ValidationSummary class="text-danger" role="alert" />
+    <div class="form-floating mb-3">
+        <InputText @bind-Value="loginmodel.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+        <label for="email">Email</label>
+        <ValidationMessage For="() => loginmodel.Email" class="text-danger" />
+    </div>
+    <div class="form-floating mb-3">
+        <InputText type="password" @bind-Value="loginmodel.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+        <label for="password">Password</label>
+        <ValidationMessage For="() => loginmodel.Password" class="text-danger" />
+    </div>
+    
+    <button type="submit" class="w-100 btn btn-lg btn-primary">Login</button>
+</EditForm>
+
+@code {
+    [SupplyParameterFromForm]
+    private LoginModel loginmodel { get; set; } = new();
+    private string errorMessage;
+
+    public class LoginModel
+    {
+        [EmailAddress]
+        [Display(Name = "Email")]
+        public string Email { get; set; } = string.Empty;
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
+        public string Password { get; set; } = string.Empty;
+
+    }
+    public async Task SubmitLoginDetails()
+    {
+        //var userDetails = SignInManager.UserManager.Users.FirstOrDefault(u => u.Email.ToLower() == loginmodel.Email.ToLower());
+        //AspNetUser = applicationUser
+        //var userDetails = await _userManager.FindByEmailAsync(loginmodel.Email);
+
+        SignInResult result = await SignInManager.PasswordSignInAsync(loginmodel.Email, loginmodel.Password, false, false);
+        if (result.Succeeded)
+        {
+            //Navigation.NavigateTo("/");
+            Navigation.NavigateTo("/addstudent");
+        }
+        else
+        {
+            errorMessage = "Invalid login attempt.";
+            
+        }
+    }
+
+}

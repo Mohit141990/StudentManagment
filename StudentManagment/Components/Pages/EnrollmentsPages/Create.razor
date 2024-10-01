@@ -1,0 +1,59 @@
+﻿@page "/enrollments/create"
+@using Microsoft.EntityFrameworkCore
+@using StudentManagment.Core.Entites
+@inject IDbContextFactory<StudentManagment.Data.StudentMGTDBContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h2>Enrollments</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="Enrollments" OnValidSubmit="AddEnrollments" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" />
+            <div class="mb-3">
+                <label for="studentid" class="form-label">StudentID:</label> 
+                <InputNumber id="studentid" @bind-Value="Enrollments.StudentID" class="form-control" /> 
+                <ValidationMessage For="() => Enrollments.StudentID" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="courseid" class="form-label">CourseID:</label> 
+                <InputNumber id="courseid" @bind-Value="Enrollments.CourseID" class="form-control" /> 
+                <ValidationMessage For="() => Enrollments.CourseID" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="enrollmentdate" class="form-label">EnrollmentDate:</label> 
+                <InputDate id="enrollmentdate" @bind-Value="Enrollments.EnrollmentDate" class="form-control" /> 
+                <ValidationMessage For="() => Enrollments.EnrollmentDate" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="grade" class="form-label">Grade:</label> 
+                <InputText id="grade" @bind-Value="Enrollments.Grade" class="form-control" /> 
+                <ValidationMessage For="() => Enrollments.Grade" class="text-danger" /> 
+            </div>        
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/enrollments">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private Enrollments Enrollments { get; set; } = new();
+
+    // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task AddEnrollments()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Enrollment.Add(Enrollments);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/enrollments");
+    }
+}

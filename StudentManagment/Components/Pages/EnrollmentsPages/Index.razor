@@ -1,0 +1,39 @@
+﻿@page "/enrollments"
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using StudentManagment.Core.Entites
+@using StudentManagment.Data
+@implements IAsyncDisposable
+@inject IDbContextFactory<StudentManagment.Data.StudentMGTDBContext> DbFactory
+
+<PageTitle>Index</PageTitle>
+
+<h1>Index</h1>
+
+<p>
+    <a href="enrollments/create">Create New</a>
+</p>
+
+<QuickGrid Class="table" Items="context.Enrollment">
+    <PropertyColumn Property="enrollments => enrollments.StudentID" />
+    <PropertyColumn Property="enrollments => enrollments.CourseID" />
+    <PropertyColumn Property="enrollments => enrollments.EnrollmentDate" />
+    <PropertyColumn Property="enrollments => enrollments.Grade" />
+
+    <TemplateColumn Context="enrollments">
+        <a href="@($"enrollments/edit?enrollmentid={enrollments.EnrollmentID}")">Edit</a> |
+        <a href="@($"enrollments/details?enrollmentid={enrollments.EnrollmentID}")">Details</a> |
+        <a href="@($"enrollments/delete?enrollmentid={enrollments.EnrollmentID}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>
+
+@code {
+    private StudentMGTDBContext context = default!;
+
+    protected override void OnInitialized()
+    {
+        context = DbFactory.CreateDbContext();
+    }
+
+    public async ValueTask DisposeAsync() => await context.DisposeAsync();
+}

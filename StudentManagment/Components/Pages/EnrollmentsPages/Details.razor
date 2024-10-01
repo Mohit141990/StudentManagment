@@ -1,0 +1,52 @@
+﻿@page "/enrollments/details"
+@using Microsoft.EntityFrameworkCore
+@using StudentManagment.Core.Entites
+@inject IDbContextFactory<StudentManagment.Data.StudentMGTDBContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h2>Enrollments</h2>
+    <hr />
+    @if (enrollments is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">StudentID</dt>
+            <dd class="col-sm-10">@enrollments.StudentID</dd>
+            <dt class="col-sm-2">CourseID</dt>
+            <dd class="col-sm-10">@enrollments.CourseID</dd>
+            <dt class="col-sm-2">EnrollmentDate</dt>
+            <dd class="col-sm-10">@enrollments.EnrollmentDate</dd>
+            <dt class="col-sm-2">Grade</dt>
+            <dd class="col-sm-10">@enrollments.Grade</dd>
+        </dl>
+        <div>
+            <a href="@($"/enrollments/edit?enrollmentid={enrollments.EnrollmentID}")">Edit</a> |
+            <a href="@($"/enrollments")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    private Enrollments? enrollments;
+
+    [SupplyParameterFromQuery]
+    private long EnrollmentID { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        enrollments = await context.Enrollment.FirstOrDefaultAsync(m => m.EnrollmentID == EnrollmentID);
+
+        if (enrollments is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+}
