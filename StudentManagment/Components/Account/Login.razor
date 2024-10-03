@@ -7,25 +7,28 @@
 @inject UserManager<ApplicationUser> _userManager;
 @inject NavigationManager Navigation
 
+<div class="row">
+    <div class="col-md-4">
+        <EditForm Model="loginmodel" method="post" OnValidSubmit="SubmitLoginDetails" FormName="login">
+            <DataAnnotationsValidator />
+            <h2>Login To System</h2>
+            <hr />
+            <ValidationSummary class="text-danger" role="alert" />
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="loginmodel.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                <label for="email">Email</label>
+                <ValidationMessage For="() => loginmodel.Email" class="text-danger" />
+            </div>
+            <div class="form-floating mb-3">
+                <InputText type="password" @bind-Value="loginmodel.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                <label for="password">Password</label>
+                <ValidationMessage For="() => loginmodel.Password" class="text-danger" />
+            </div>
 
-<EditForm Model="loginmodel" method="post" OnValidSubmit="SubmitLoginDetails" FormName="login">
-    <DataAnnotationsValidator />
-    <h2>Login To System</h2>
-    <hr />
-    <ValidationSummary class="text-danger" role="alert" />
-    <div class="form-floating mb-3">
-        <InputText @bind-Value="loginmodel.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-        <label for="email">Email</label>
-        <ValidationMessage For="() => loginmodel.Email" class="text-danger" />
+            <button type="submit" class="w-100 btn btn-lg btn-primary">Login</button>
+        </EditForm>
     </div>
-    <div class="form-floating mb-3">
-        <InputText type="password" @bind-Value="loginmodel.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-        <label for="password">Password</label>
-        <ValidationMessage For="() => loginmodel.Password" class="text-danger" />
-    </div>
-    
-    <button type="submit" class="w-100 btn btn-lg btn-primary">Login</button>
-</EditForm>
+</div>
 
 @code {
     [SupplyParameterFromForm]
@@ -58,7 +61,7 @@
         else
         {
             errorMessage = "Invalid login attempt.";
-            
+
         }
     }
 

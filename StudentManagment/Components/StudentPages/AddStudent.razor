@@ -1,72 +1,228 @@
 ﻿@page "/addstudent"
+@* @page "/addstudent/{StudentId:long?}" *@
 @using Microsoft.EntityFrameworkCore
 @using StudentManagment.Core.Entites
-@inject IDbContextFactory<StudentManagment.Data.StudentMGTDBContext> DbFactory
+@using StudentManagment.Data
+@using MudBlazor;
+@rendermode InteractiveServer
+@* @inject IDbContextFactory<StudentMGTDBContext> DbFactory *@
+@inject StudentMGTDBContext DbContext
 @inject NavigationManager NavigationManager
-<h3>AddStudent</h3>
+<h3>@(studentModel?.StudentID == 0 ? "Add Student" : "Edit Student")</h3>
 
-<div class="row">
-    <div class="col-md-4">
-        <EditForm Model="studentModel" method="post" OnValidSubmit="AddStudentInformation" FormName="studentdetail">
-            <DataAnnotationsValidator />
-            <ValidationSummary class="text-danger" />
-            <div class="mb-3">
-                <label for="firstname" class="form-label">First Name:</label>
-                <InputText id="firstname" @bind-Value="studentModel.FirstName" class="form-control" />
-                <ValidationMessage For="() => studentModel.FirstName" class="text-danger" />
-            </div>
-            <div class="mb-3">
-                <label for="lastname" class="form-label">Last Name:</label>
-                <InputText id="lastname" @bind-Value="studentModel.LastName" class="form-control" />
-                <ValidationMessage For="() => studentModel.LastName" class="text-danger" />
-            </div>
-            <div class="mb-3">
-                <label for="dateofbirth" class="form-label">DOB:</label>
-                <InputDate id="dateofbirth" @bind-Value="studentModel.DateOfBirth" class="form-control" />
-                <ValidationMessage For="() => studentModel.DateOfBirth" class="text-danger" />
-            </div>
-            <div class="mb-3">
-                <label for="gender" class="form-label">Gender:</label>
-                <InputText id="gender" @bind-Value="studentModel.Gender" class="form-control" />
-                <ValidationMessage For="() => studentModel.Gender" class="text-danger" />
-            </div>
-            <div class="mb-3">
-                <label for="email" class="form-label">Email:</label>
-                <InputText id="email" @bind-Value="studentModel.Email" class="form-control" />
-                <ValidationMessage For="() => studentModel.Email" class="text-danger" />
-            </div>
-            <div class="mb-3">
-                <label for="phonenumber" class="form-label">Phone Number:</label>
-                <InputText id="phonenumber" @bind-Value="studentModel.PhoneNumber" class="form-control" />
-                <ValidationMessage For="() => studentModel.PhoneNumber" class="text-danger" />
-            </div>
-            <div class="mb-3">
-                <label for="address" class="form-label">Address:</label>
-                <InputText id="address" @bind-Value="studentModel.Address" class="form-control" />
-                <ValidationMessage For="() => studentModel.Address" class="text-danger" />
-            </div>
-            <div class="mb-3">
-                <label for="enrollmentDate" class="form-label">Enrollment Date:</label>
-                <InputDate id="enrollmentDate" @bind-Value="studentModel.EnrollmentDate" class="form-control" />
-                <ValidationMessage For="() => studentModel.EnrollmentDate" class="text-danger" />
-            </div>
-        </EditForm>
+@if (studentModel is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+     
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm Model="studentModel"  method="post" OnValidSubmit="HandelSubmit" FormName="studentdetail">
+               @*  <MudTextField @bind-Value="studentModel.FirstName" Label="First Name" Variant="Variant.Outlined"></MudTextField> *@
+                <DataAnnotationsValidator />
+                <ValidationSummary class="text-danger" />
+                <div class="mb-3">
+                    <label for="firstname" class="form-label">First Name:</label>
+                    <InputText id="firstname" @bind-Value="studentModel.FirstName" class="form-control" />
+                   
+                    <ValidationMessage For="() => studentModel.FirstName" class="text-danger" />
+
+                    
+                </div>
+                <div class="mb-3">
+                    <label for="lastname" class="form-label">Last Name:</label>
+                    <InputText id="lastname" @bind-Value="studentModel.LastName" class="form-control" />
+                    <ValidationMessage For="() => studentModel.LastName" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="dateofbirth" class="form-label">DOB:</label>
+                    <InputDate id="dateofbirth" @bind-Value="studentModel.DateOfBirth" class="form-control" />
+                    <ValidationMessage For="() => studentModel.DateOfBirth" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="gender" class="form-label">Gender:</label>
+                    <InputText id="gender" @bind-Value="studentModel.Gender" class="form-control" />
+                    <ValidationMessage For="() => studentModel.Gender" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email:</label>
+                    <InputText id="email" @bind-Value="studentModel.Email" class="form-control" />
+                    <ValidationMessage For="() => studentModel.Email" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="phonenumber" class="form-label">Phone Number:</label>
+                    <InputText id="phonenumber" @bind-Value="studentModel.PhoneNumber" class="form-control" />
+                    <ValidationMessage For="() => studentModel.PhoneNumber" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address:</label>
+                    <InputText id="address" @bind-Value="studentModel.Address" class="form-control" />
+                    <ValidationMessage For="() => studentModel.Address" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="enrollmentDate" class="form-label">Enrollment Date:</label>
+                    <InputDate id="enrollmentDate" @bind-Value="studentModel.EnrollmentDate" class="form-control" />
+                    <ValidationMessage For="() => studentModel.EnrollmentDate" class="text-danger" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="courseName" class="form-label">Course Name:</label>
+                    <InputText id="courseName" @bind-Value="courseModel.CourseName" class="form-control" />
+                    <ValidationMessage For="() => courseModel.CourseName" class="text-danger" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="courseDescription" class="form-label">Course Description:</label>
+                    <InputText id="courseDescription" @bind-Value="courseModel.CourseDescription" class="form-control" />
+                    <ValidationMessage For="() => courseModel.CourseDescription" class="text-danger" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="eenrollmentDate" class="form-label">Enrollment Date:</label>
+                    <InputDate id="eenrollmentDate" @bind-Value="enrollmentModel.EnrollmentDate" class="form-control" />
+                    <ValidationMessage For="() => enrollmentModel.EnrollmentDate" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="grade" class="form-label">Grade:</label>
+                    <InputText id="grade" @bind-Value="enrollmentModel.Grade" class="form-control" />
+                    <ValidationMessage For="() => enrollmentModel.Grade" class="text-danger" />
+                </div>
+                <button type="submit" class="w-100 btn btn-lg btn-primary">@buttonText</button>
+            </EditForm>
+        </div>
     </div>
-</div>
+}
+
+
 
 @code {
-
+    private string buttonText = "Add";
+    [SupplyParameterFromQuery]
+    private long? StudentId { get; set; }
+    // [SupplyParameterFromForm]
+    // private Student studentModel { get; set; } = new();
     [SupplyParameterFromForm]
-    private Student studentModel { get; set; } = new();
+    private Student? studentModel { get; set; }
+    [SupplyParameterFromForm]
+    private Enrollments? enrollmentModel { get; set; }
+    [SupplyParameterFromForm]
+    private Courses? courseModel { get; set; }
 
-    private async Task AddStudentInformation()
+    // protected override async Task OnAfterRenderAsync(bool firstRend)
+    // {
+    //     if (firstRend)
+    //     {
+    //         if (StudentId.HasValue)
+    //         {
+    //             // Edit Mode
+    //             //student = await StudentService.GetStudentByIdAsync(Id.Value);
+    //             studentModel = await DbContext.Students.FirstOrDefaultAsync(student => student.StudentID == StudentId);
+    //             if (studentModel == null)
+    //             {
+    //                 // Handle not found
+    //                 //Navigation.NavigateTo("/students");
+    //                 NavigationManager.NavigateTo("notfound");
+    //             }
+    //             buttonText = "Update";
+    //         }
+    //         else
+    //         {
+    //             // Add Mode
+    //             studentModel = new Student();  // new student for add operation
+    //             buttonText = "Add";
+    //         }
+    //         StateHasChanged();
+    //     }
+
+
+    // }
+
+    protected override async Task OnInitializedAsync()
+    {
+        //await base.OnInitializedAsync();
+        if (StudentId.HasValue)
+        {
+            // Edit Mode
+            //student = await StudentService.GetStudentByIdAsync(Id.Value);
+            buttonText = "Update";
+            enrollmentModel = await DbContext.Enrollment.Include(s=>s.Students).Include(c=>c.Course).FirstOrDefaultAsync(enrollment => enrollment.StudentID == StudentId);
+
+            if (enrollmentModel != null)
+            {
+                studentModel = enrollmentModel.Students;
+                courseModel = enrollmentModel.Course;
+            }
+            else
+            {
+                NavigationManager.NavigateTo("notfound");
+            }
+
+            // studentModel = await DbContext.Students.FirstOrDefaultAsync(student => student.StudentID == StudentId);
+            // if (studentModel == null)
+            // {
+            //     // Handle not found
+            //     //Navigation.NavigateTo("/students");
+            //     NavigationManager.NavigateTo("notfound");
+            // }
+          
+        }
+        else
+        {
+            // Add Mode
+            studentModel = new Student();  // new student for add operation
+            enrollmentModel = new Enrollments();
+            courseModel = new Courses();
+            buttonText = "Add";
+        }
+    }
+
+    private async Task HandelSubmit()
     {
         try
         {
-            using var context = DbFactory.CreateDbContext();
-            context.Students.Add(studentModel);
-            await context.SaveChangesAsync();
-            NavigationManager.NavigateTo("/enrollments");
+            // using var context = DbFactory.CreateDbContext();
+            // context.Students.Add(studentModel);
+            // await context.SaveChangesAsync();
+
+            // Add the student to the DbContext
+           // DbContext.Students.Add(studentModel);
+
+            // Save changes to the database
+            //await DbContext.SaveChangesAsync();
+
+            // Clear the form
+            //studentModel = new Student();
+            //NavigationManager.NavigateTo("/enrollments");
+
+            if (studentModel?.StudentID == 0)
+            {
+                // Add operation
+               // await StudentService.AddStudentAsync(student);
+                DbContext.Students.Add(studentModel);
+                await DbContext.SaveChangesAsync();
+
+                DbContext.Course.Add(courseModel);
+                await DbContext.SaveChangesAsync();
+
+                enrollmentModel.StudentID = studentModel.StudentID;
+                enrollmentModel.CourseID = courseModel.CourseID;
+
+                DbContext.Enrollment.Add(enrollmentModel);
+                await DbContext.SaveChangesAsync();
+
+                studentModel = new Student();
+                enrollmentModel = new Enrollments();
+                courseModel = new Courses();
+            }
+            else
+            {
+                // Edit operation
+                //await StudentService.UpdateStudentAsync(student);
+                DbContext.Students.Update(studentModel);
+                await DbContext.SaveChangesAsync();
+            }
         }
         catch (Exception ex)
         {

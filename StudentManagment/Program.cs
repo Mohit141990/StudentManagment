@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using MudBlazor.Services;
 using StudentManagment.Components;
 using StudentManagment.Core;
 using StudentManagment.Data;
@@ -8,12 +10,18 @@ using StudentManagment.Data;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddMudServices();
 
 
 
 // Add services to the container.
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<StudentMGTDBContext>(options =>options.UseSqlServer(connectionString));
+
+//builder.Services.AddDbContextFactory<StudentMGTDBContext>(options =>
+//{
+//    options.UseSqlServer(connectionString);
+//});
 
 builder.Services.AddQuickGridEntityFrameworkAdapter();
 
@@ -29,6 +37,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
 builder.Services.AddScoped<IdentityRedirectManager>();
+//builder.Services.AddScoped<IDbContextFactory, DbContextFactory>();
 //builder.Services.AddScoped<NavigationManager>();
 
 

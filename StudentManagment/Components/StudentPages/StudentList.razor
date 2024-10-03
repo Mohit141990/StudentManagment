@@ -1,0 +1,67 @@
+﻿@page "/studentlist"
+@using Microsoft.EntityFrameworkCore
+@using StudentManagment.Core.Entites
+@using StudentManagment.Data
+@* @inject IDbContextFactory<StudentManagment.Data.StudentMGTDBContext> DbFactory *@
+@inject StudentMGTDBContext DbContext
+@inject NavigationManager NavigationManager
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    @if (students == null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else if (!students.Any())
+    {
+        <p>No students found.</p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Admission ID</th>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>DOB</th>
+                    <th>Enrollment Date</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var student in students)
+                {
+                    <tr>
+                        <td>@("S"+student.StudentID)</td>
+                        <td>@(student.FirstName + " " + student.LastName)</td>
+                        <td>@student.Gender</td>
+                        <td>@student.DateOfBirth</td>
+                        <td>@student.EnrollmentDate</td>
+                        <td>@student.PhoneNumber</td>
+                        <td>@student.Address</td>
+                        <td>
+                            <a href="@($"/addstudent?StudentId={student.StudentID}")">Edit</a> |
+                            <a href="@($"/enrollments")">Back to List</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@code {
+    private List<Student> students;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Load students from the database using DbContext
+        students = await DbContext.Students.ToListAsync();
+    }
+}

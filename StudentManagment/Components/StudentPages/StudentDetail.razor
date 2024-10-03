@@ -1,0 +1,62 @@
+﻿@page "/studentdetail"
+@using Microsoft.EntityFrameworkCore
+@using StudentManagment.Core.Entites
+@using StudentManagment.Data
+@* @inject IDbContextFactory<StudentManagment.Data.StudentMGTDBContext> DbFactory *@
+@inject StudentMGTDBContext DbContext
+@inject NavigationManager NavigationManager
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h2>Student</h2>
+    <hr />
+    @if (students is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else
+    {
+        <dl class="row">
+            <dt class="col-sm-2">StudentID</dt>
+            <dd class="col-sm-10">@students.StudentID</dd>
+            <dt class="col-sm-2">Student Name</dt>
+            <dd class="col-sm-10">$"{@students.FirstName} {@students.LastName}" </dd>
+            <dt class="col-sm-2">Email</dt>
+            <dd class="col-sm-10">@students.Email</dd>
+            <dt class="col-sm-2">Date of Birth</dt>
+            <dd class="col-sm-10">@students.DateOfBirth</dd>
+            <dt class="col-sm-2">Date of Enrollment</dt>
+            <dd class="col-sm-10">@students.EnrollmentDate</dd>
+            <dt class="col-sm-2">Phone </dt>
+            <dd class="col-sm-10">@students.PhoneNumber</dd>
+            <dt class="col-sm-2">Address </dt>
+            <dd class="col-sm-10">@students.Address</dd>
+        </dl>
+        <div>
+            <a href="@($"/enrollments/edit?enrollmentid={students.StudentID}")">Edit</a> |
+            <a href="@($"/enrollments")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    private Student? students;
+
+    [SupplyParameterFromQuery]
+    private long StudentID { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // using var context = DbFactory.CreateDbContext();
+        // students = await context.Students.FirstOrDefaultAsync(m => m.StudentID == StudentID);
+
+        // if (students is null)
+        // {
+        //     NavigationManager.NavigateTo("notfound");
+        // }
+        //students = await DbContext.Students.ToListAsync();
+    }
+}
