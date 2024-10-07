@@ -28,7 +28,11 @@ builder.Services.AddQuickGridEntityFrameworkAdapter();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<StudentMGTDBContext>();
+//builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false).AddRoles<ApplicationUserRole>().AddEntityFrameworkStores<StudentMGTDBContext>();
+
+builder.Services.AddIdentity<ApplicationUser, ApplicationUserRole>()
+       .AddEntityFrameworkStores<StudentMGTDBContext>()
+       .AddDefaultTokenProviders();
 
 
 // Add services to the container.
@@ -37,6 +41,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
 builder.Services.AddScoped<IdentityRedirectManager>();
+builder.Services.AddScoped<RoleManager<ApplicationUserRole>>();
 //builder.Services.AddScoped<IDbContextFactory, DbContextFactory>();
 //builder.Services.AddScoped<NavigationManager>();
 

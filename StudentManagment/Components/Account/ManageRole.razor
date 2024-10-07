@@ -1,0 +1,56 @@
+﻿@page "/role-management"
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@using MudBlazor;
+@inject UserManager<ApplicationUser> userManager
+@inject RoleManager<ApplicationUserRole> roleManager
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+<h3>Role Management</h3>
+
+<EditForm Model="roles" OnValidSubmit="CreateRole" FormName="managerole" method="post">
+    <div class="form-floating mb-3">
+        <label>Role Name:</label>
+        <InputText @bind-Value="newRoleName" class="form-control" aria-required="true" />
+    </div>
+    <button type="submit" class="w-100 btn btn-lg btn-primary">Create Role</button>
+</EditForm>
+
+<h4>Available Roles:</h4>
+<ul>
+    @foreach (var role in roles)
+    {
+        <li>@role.Name</li>
+    }
+</ul>
+
+@code {
+    private string newRoleName { get; set; }
+    private List<ApplicationUserRole> roles = new List<ApplicationUserRole>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        roles = await roleManager.Roles.ToListAsync();
+    }
+
+    private async Task CreateRole()
+    {
+        if (!string.IsNullOrEmpty(newRoleName))
+        {
+            var result = await roleManager.CreateAsync(
+                new ApplicationUserRole 
+                { 
+
+                    Name = newRoleName 
+                });
+            if (result.Succeeded)
+            {
+                roles = await roleManager.Roles.ToListAsync(); // Refresh the list of roles
+            }
+            else
+            {
+                // Handle error
+            }
+        }
+    }
+}

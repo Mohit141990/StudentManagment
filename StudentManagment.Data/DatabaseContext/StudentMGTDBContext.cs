@@ -20,6 +20,8 @@ namespace StudentManagment.Data
         public virtual DbSet<Enrollments> Enrollment { get; set; } = null!;
         public virtual DbSet<Courses> Course { get; set; } = null!;
 
+        public DbSet<ApplicationUserRole> ApplicationUserRoles { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             string connectionString = string.Empty;

@@ -1,0 +1,64 @@
+﻿@page "/adduser"
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@using MudBlazor;
+@inject UserManager<IdentityUser> userManager
+@inject RoleManager<IdentityRole> roleManager
+@inject NavigationManager Navigation
+<h3>AddUser</h3>
+
+<MudCard>
+    <MudCardContent>
+        <MudForm @ref="form" @valid="isValid">
+            <MudTextField @bind-Value="newUser.Email" Label="Email" Required="true" />
+            <MudTextField @bind-Value="newUser.Password" Label="Password" InputType="InputType.Password" Required="true" />
+            <MudSelect T="string" Label="Role" @bind-Value="selectedRole" Required="true">
+                @foreach (var role in roles)
+                {
+                    <MudSelectItem Value="@role">@role</MudSelectItem>
+                }
+            </MudSelect>
+        </MudForm>
+        <MudButton OnClick="RegisterUser" Disabled="!isValid">Add User</MudButton>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    private MudForm form;
+    private bool isValid;
+    private RegisterModel newUser = new RegisterModel();
+    private string selectedRole;
+    private List<string> roles = new List<string>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        roles = (await roleManager.Roles.ToListAsync()).Select(r => r.Name).ToList();
+    }
+
+    private async Task RegisterUser()
+    {
+        if (isValid)
+        {
+            var user = new IdentityUser { UserName = newUser.Email, Email = newUser.Email };
+            var result = await userManager.CreateAsync(user, newUser.Password);
+            if (result.Succeeded)
+            {
+                if (!string.IsNullOrEmpty(selectedRole))
+                {
+                    await userManager.AddToRoleAsync(user, selectedRole);
+                }
+                Navigation.NavigateTo("/users");
+            }
+            else
+            {
+                // Handle errors (e.g., display validation errors)
+            }
+        }
+    }
+
+    public class RegisterModel
+    {
+        public string Email { get; set; }
+        public string Password { get; set; }
+    }
+}

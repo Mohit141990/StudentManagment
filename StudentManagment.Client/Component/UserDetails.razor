@@ -1,0 +1,22 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@using StudentManagment.Core
+<h3>UserDetails</h3>
+@inject RoleManager<ApplicationUserRole> roleManager
+@inject UserManager<ApplicationUser> userManager
+
+@code {
+    // private List<ApplicationUserRole> roles = new List<ApplicationUserRole>();
+
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     roles = await roleManager.Roles.ToListAsync();
+    // }
+    private List<ApplicationUser> users;
+
+    
+    protected override async Task OnInitializedAsync()
+    {
+        users =  userManager.Users.ToList();
+    }
+}

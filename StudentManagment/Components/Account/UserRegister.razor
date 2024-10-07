@@ -3,22 +3,26 @@
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Identity.EntityFrameworkCore
 @using Microsoft.AspNetCore.WebUtilities
+@using Microsoft.EntityFrameworkCore
 @using Microsoft.Extensions.Logging
 @using System.Text
 @using System.Text.Encodings.Web
+@using StudentManagment.Client.Component
 @using StudentManagment.Client.Layout
 
 @inject UserManager<ApplicationUser> UserManager
 @inject IUserStore<ApplicationUser> UserStore
 @inject SignInManager<ApplicationUser> SignInManager
-@inject IEmailSender<ApplicationUser> EmailSender
+@* @inject IEmailSender<ApplicationUser> EmailSender *@
 @inject ILogger<UserRegister> Logger
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
+@inject RoleManager<ApplicationUserRole> roleManager
 
 <h3>Register User</h3>
 
-
+<div class="row">
+        <div class="col-md-4">
 <EditForm Model="registermodel" asp-route-returnUrl="@ReturnUrl" method="post" OnValidSubmit="RegisterUserValid" FormName="register">
     <DataAnnotationsValidator />
     <h2>Create a new account.</h2>
@@ -39,8 +43,21 @@
         <label for="confirm-password">Confirm Password</label>
         <ValidationMessage For="() => registermodel.ConfirmPassword" class="text-danger" />
     </div>
+    <div class="form-floating mb-3">
+        <InputSelect @bind-Value="registermodel.SelectedRole">
+            <option value="">-- Select a Role --</option>
+            @foreach (var role in roles)
+            {
+                <option value="@role">@role</option>
+            }
+        </InputSelect>
+    </div>
     <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
 </EditForm>
+    </div>
+</div>
+
+<UserDetails/>
 
 @code {
 
@@ -49,11 +66,21 @@
     [SupplyParameterFromForm]
     private RegisterModel registermodel { get; set; } = new();
 
+    //private string selectedRole;
 
     [SupplyParameterFromQuery]
     private string? ReturnUrl { get; set; }
 
     private string? Message => identityErrors is null ? null : $"Error: {string.Join(", ", identityErrors.Select(error => error.Description))}";
+
+
+    private List<ApplicationUserRole> roles = new List<ApplicationUserRole>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        roles = await roleManager.Roles.ToListAsync();
+    }
+
 
     public sealed class RegisterModel
     {
@@ -72,6 +99,9 @@
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; } = string.Empty;
+
+
+        public string SelectedRole { get; set; } = string.Empty;
     }
 
     private ApplicationUser CreateUser()
@@ -109,6 +139,10 @@
         {
             identityErrors = result.Errors;
             return;
+        }
+        else
+        {
+            await UserManager.AddToRoleAsync(user, registermodel.SelectedRole);
         }
 
         //Logger.LogInformation("User created a new account with password.");
